@@ -16,15 +16,11 @@ using Grid = std::vector<std::vector<char>>;
 const std::array<char, 4> XMAS = {'X', 'M', 'A', 'S'};
 const std::array<char, 4> SAMX = {'S', 'A', 'M', 'X'};
 
-bool array_equal(const std::array<char, 4>& arr1, const std::array<char, 4>& target) {
-    return arr1 == target;
-}
-
 bool array_has_xmas(const std::array<char, 4>& arr) {
-    return array_equal(arr, XMAS) || array_equal(arr, SAMX);
+    return arr == SAMX || arr == XMAS;
 }
 
-std::array<char, 4> get_column(const std::vector<std::vector<char>>& block, int col) {
+std::array<char, 4> get_first_column(const std::vector<std::vector<char>>& block, int col) {
     std::array<char, 4> result;
     for (int i = 0; i < 4; i++) {
         result[i] = block[i][col];
@@ -32,7 +28,7 @@ std::array<char, 4> get_column(const std::vector<std::vector<char>>& block, int 
     return result;
 }
 
-std::array<char, 4> get_row(const std::vector<std::vector<char>>& block, int row) {
+std::array<char, 4> get_first_row(const std::vector<std::vector<char>>& block, int row) {
     std::array<char, 4> result;
     for (int i = 0; i < 4; i++) {
         result[i] = block[row][i];
@@ -122,10 +118,6 @@ std::array<char, 5> get_cross_pattern(const std::vector<std::vector<char>>& bloc
     return result;
 }
 
-bool array_equal_5(const std::array<char, 5>& arr1, const std::array<char, 5>& target) {
-    return arr1 == target;
-}
-
 bool search_cross_mas(const std::vector<std::vector<char>>& block) {
     std::array<char, 5> letters = get_cross_pattern(block);
     
@@ -137,7 +129,7 @@ bool search_cross_mas(const std::vector<std::vector<char>>& block) {
     }};
     
     for (const auto& rotation : rotations) {
-        if (array_equal_5(letters, rotation)) {
+        if (letters == rotation) {
             return true;
         }
     }
