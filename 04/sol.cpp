@@ -54,10 +54,10 @@ std::array<char, 4> get_anti_diagonal(const std::vector<std::vector<char>>& bloc
 
 int search_xmas_in_block(const std::vector<std::vector<char>>& block) {
     int count = 0;
-    if (array_has_xmas(get_column(block, 0))) {
+    if (array_has_xmas(get_first_column(block, 0))) {
         count++;
     }
-    if (array_has_xmas(get_row(block, 0))) {
+    if (array_has_xmas(get_first_row(block, 0))) {
         count++;
     }
     if (array_has_xmas(get_diagonal(block))) {
