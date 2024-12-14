@@ -1,3 +1,19 @@
+/*
+Part 1:
+* 1. First, we convert the input into a 2D vector of characters.
+* 2. Then, we find all the positions of the unique frequences.
+* 3. We then use combinatorials of the positions to find all the unique paris of positions.
+* 4. For each pair, we first find the delta position in x and y, 
+* 5. Then find the two antinode positions by subtracting and adding the delta position.
+* 6. We then check if the antinode positions are within the bounds of the map.
+* 7. Finally, we calculate the total number of antinode positions.
+
+Part 2:
+* 1. Same at step 1-5 in part 1.
+* 2. Instead of finding the + and - delta positions, we find all the integer multiples of the delta position.
+* 3. We then check if the harmonics positions are within the bounds of the map.
+* 4. Finally, we calculate the total number of harmonics positions.
+*/
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -33,6 +49,8 @@ void print_2d_vector(const std::vector<std::vector<T>>& vec) {
     std::cout << "----- end -----" << std::endl;
 }
 
+// Each instance of AntennaArray is for a single frequency.
+// Has processing methods for finding antinode and harmonics positions.
 class AntennaArray {
 private:
     char frequency;
