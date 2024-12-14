@@ -1,3 +1,18 @@
+/*
+Part 1:
+* 1. We first parse the input into a Map object.
+* 2. We then find the carat and its direction.
+* 3. We then move the carat to the next position.
+* 4. We then update the map with the new position of the carat.
+* 5. We repeat the process until the carat is out of bounds or we have found a loop.
+* 6. Finally, we return the total number of visited positions.
+
+Part 2:
+* 1. Same as part 1, but we also check if the carat has travelled in the historic path.
+    * Only if the carat is traveling in the same historic PATH AND DIRECTION do we 
+        consider it a loop. 
+* 2. We then return the total number of loops.
+*/
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -19,6 +34,7 @@ enum class ExitCode {
     OUT_OF_BOUNDS
 };
 
+// Stores the map and the historic movement of the carat.
 class Map {
 private:
     std::vector<std::vector<char>> current_map;
@@ -31,6 +47,7 @@ private:
     bool travelled_in_historic_path;
     bool turning;
 
+    // returns the position and direction of the carat
     std::pair<std::pair<int, int>, int> find_carat() {
         std::array<char, 4> carat_chars = {'^', '>', 'v', '<'};
         for (int i = 0; i < current_map.size(); i++) {
@@ -50,6 +67,7 @@ private:
         return carat_chars[current_dir_idx];
     }
 
+    // returns the location of that the carat is facing.
     std::pair<int, int> find_loc_in_front() {
         std::pair<int, int> loc = current_loc;
         switch (current_dir_idx) {
@@ -66,6 +84,7 @@ private:
         return loc;
     }
 
+    // returns the object in front of the carat
     char find_obj_in_front() {
         auto loc = find_loc_in_front();
         if (loc.first == -1) return '\0';
@@ -98,12 +117,14 @@ public:
         current_dir_idx = dir;
     }
 
+    // Moves the carat to the next position. Updates the states of the map.
     ExitCode update() {
         time++;
         if (detect_loop) {
             if (!turning) {
                 if (history_map[current_dir_idx][current_loc.first][current_loc.second] == 1) {
                     if (travelled_in_historic_path) {
+                        // If the carat has travelled in the historic path, we have found a loop.
                         return ExitCode::LOOP;
                     }
                     travelled_in_historic_path = true;
@@ -131,6 +152,7 @@ public:
         return ExitCode::SUCCESS;
     }
 
+    // Returns the total number of visited positions.
     int get_total_visited() {
         int sum = 0;
         for (int i = 0; i < current_map.size(); i++) {
