@@ -1,3 +1,15 @@
+/*
+Part 1:
+* 1. We first parse the input into a list of numbers and the target number.
+* 2. We then find all the possible combinations of operators that can be used to equate the target number.
+* 3. We then check if the target number can be equated using the operators. 
+     * There is probably huristics to filter out some of the combinations. But here we use BruteForce™.
+* 4. If it can, we add the target number to the tally.
+* 5. Finally, we return the tally.
+
+Part 2:
+* 1. Same as part 1, but we add the || operator to the possible operators.
+*/
 #include <iostream>
 #include <fstream>
 #include <string>
