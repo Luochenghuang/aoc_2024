@@ -1,3 +1,21 @@
+/*
+Part 1 (brute force solution, takes about 20 seconds to compute):
+- First, we convert the input into pairs, representing the used and unused space.
+- Then, we convert the pairs into data blocks.
+- Then, we iteratively move the last data block to the first empty space until
+  all data blocks are moved.
+- Finally, we calculate the checksum of the blocks.
+
+Part 2 (pretty fast, < 1 second):
+- First, we convert the input into pairs, representing the used and unused space.
+- Then, we convert the pairs into data blocks.
+- Then, we iteratively move the last data block to the first empty space until 
+  all data blocks are moved.
+  - This step is complicated by the fact that we need to first find the first 
+    contiguous free space of the given size, and then move the file to the 
+    first empty space.
+- Finally, we calculate the checksum of the blocks.
+*/
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -11,6 +29,7 @@ std::string readFile(const std::string& filename) {
                        std::istreambuf_iterator<char>());
 }
 
+// Converts the inputs into pairs, representing the used and unused space.
 std::vector<std::pair<int, int>> parseStrToPairs(const std::string& input) {
     std::vector<std::pair<int, int>> pairs;
     std::pair<int, int> pair;
@@ -31,6 +50,7 @@ std::vector<std::pair<int, int>> parseStrToPairs(const std::string& input) {
     return pairs;
 }
 
+// Assigns the pairs into data blocks. Empty space is represented by -1.
 std::vector<std::vector<int>> pairsToBlocks(const std::vector<std::pair<int, int>>& pairs) {
     std::vector<std::vector<int>> blocks;
     for (size_t i = 0; i < pairs.size(); i++) {
@@ -46,6 +66,7 @@ std::vector<std::vector<int>> pairsToBlocks(const std::vector<std::pair<int, int
     return blocks;
 }
 
+// Converts the input into a single vector of blocks.
 std::vector<int> expandIntoBlocks(const std::string& input) {
     auto pairs = parseStrToPairs(input);
     auto blocks = pairsToBlocks(pairs);
@@ -57,6 +78,7 @@ std::vector<int> expandIntoBlocks(const std::string& input) {
     return result;
 }
 
+// Moves last data block to the first empty space.
 std::vector<int> moveOneBlock(const std::vector<int>& blocks) {
     std::vector<int> newBlocks(blocks.begin(), blocks.end() - 1);
     auto it = std::find(newBlocks.begin(), newBlocks.end(), -1);
@@ -66,6 +88,8 @@ std::vector<int> moveOneBlock(const std::vector<int>& blocks) {
     return newBlocks;
 }
 
+// Calculates the checksum of the blocks. It's important to use unsigned long long
+// to avoid overflow.
 unsigned long long checksum(const std::vector<int>& blocks) {
     unsigned long long sum = 0;
     for (size_t i = 0; i < blocks.size(); i++) {
@@ -74,6 +98,7 @@ unsigned long long checksum(const std::vector<int>& blocks) {
     return sum;
 }
 
+// Finds the start and end index of the contiguous file of the given value.
 std::pair<size_t, size_t> findContiguousFile(const std::vector<int>& blocks, int value) {
     size_t start_idx = 0;
     size_t end_idx = 0;
@@ -91,6 +116,7 @@ std::pair<size_t, size_t> findContiguousFile(const std::vector<int>& blocks, int
     return {start_idx, end_idx};
 }
 
+// Changes the file to None, represented by -1.
 std::vector<int> changeFileToNone(std::vector<int> blocks, int value) {
     for (auto& block : blocks) {
         if (block == value) {
@@ -100,6 +126,7 @@ std::vector<int> changeFileToNone(std::vector<int> blocks, int value) {
     return blocks;
 }
 
+// Finds the first contiguous free space of the given size.
 size_t findFirstContiguousFreeSpace(const std::vector<int>& blocks, size_t free_space_size) {
     size_t free_space_count = 0;
     for (size_t i = 0; i < blocks.size(); i++) {
@@ -162,4 +189,3 @@ int main() {
     std::cout << "part_2:      " << part2(input) << std::endl;
 
     return 0;
-}
